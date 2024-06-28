@@ -1,0 +1,12 @@
+services:
+  ms-curso-docker-1:
+    container_name: ms-curso-docker-1
+    image: ms-curso-docker:5
+    environment:
+      - JAVA_OPTS=-Xmx256m
+      - MESSAGE=hola container
+      - DB=10.1.1.1
+      - PASSWD=123456
+    restart: always
+    ports:
+      - "8088:8080" 
