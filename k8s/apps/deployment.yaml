@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-curso-docker-deployment
+  namespace: profesor
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ms-curso-docker
+  template:
+    metadata:
+      labels:
+        app: ms-curso-docker
+    spec:
+      containers:
+      - name: ms-curso-docker
+        image: mauron/ms-curso-docker:5
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: ms-curso-docker-config
+        - secretRef:
+            name: ms-curso-docker-secret
