@@ -4,7 +4,7 @@ metadata:
   name: ms-curso-docker-deployment
   namespace: profesor
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: ms-curso-docker
@@ -23,3 +23,29 @@ spec:
             name: ms-curso-docker-config
         - secretRef:
             name: ms-curso-docker-secret
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "300m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 1
+        volumeMounts:
+        - mountPath: /data/externo
+          name: local-storage
+      volumes:
+      - name: local-storage
+        persistentVolumeClaim:
+          claimName: local-path-pvc
