@@ -5,6 +5,6 @@ metadata:
   namespace: profesor
 data:
   JAVA_OPTS: "-Xmx256m"
-  MESSAGE: "hola container dev"
-  DB: "172.18.34.3"
-  TZ: "America/Bogota"
+  MESSAGE: "hola container1 para la prueba del ingress"
+  DB: "190.0.44.5"
+  TZ: "America/Lima"

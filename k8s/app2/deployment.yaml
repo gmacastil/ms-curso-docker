@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-curso-docker2-deployment
+  namespace: profesor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-curso-docker2
+  template:
+    metadata:
+      labels:
+        app: ms-curso-docker2
+    spec:
+      containers:
+      - name: ms-curso-docker2
+        image: mauron/ms-curso-docker:5
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: ms-curso-docker2-config
+        - secretRef:
+            name: ms-curso-docker2-secret
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "300m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 1
+        volumeMounts:
+        - mountPath: /data/externo
+          name: local-storage
+      volumes:
+      - name: local-storage
+        persistentVolumeClaim:
+          claimName: local-path-pvc2
