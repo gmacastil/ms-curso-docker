@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: ms-curso-docker
-        image: mauron/ms-curso-docker:5
+        image: mauron/ms-curso-docker:$TAG
         ports:
         - containerPort: 8080
         envFrom:
