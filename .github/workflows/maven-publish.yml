@@ -26,10 +26,23 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml  -DskipTests
       
+    - name: Get build number
+      id: build_number
+      run: echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+
     - name: Build Docker image
-      run: docker build -t mauron/ms-curso-docker:latest .
+      run: docker build -t mauron/ms-curso-docker:${{ env.BUILD_NUMBER }} .
 
     - name: Push Docker image
-      run: docker push mauron/ms-curso-docker:latest
+      run: docker push mauron/ms-curso-docker:${{ env.BUILD_NUMBER }}
 
-  
+    - name: Replace tag in deployment.yaml
+      run: |
+        sed -i "s/\$TAG/${{ env.BUILD_NUMBER }}/g" k8s/app1/deployment.yaml
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
+
+    - name: Deploy
+      run: |
+         cd k8s/app1
+         kubectl apply -f .
