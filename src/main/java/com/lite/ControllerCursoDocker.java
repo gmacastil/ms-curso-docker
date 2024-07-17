@@ -16,8 +16,12 @@ public class ControllerCursoDocker {
     @Value("${server.pwd}")
     private String pwd;
 
+    @GetMapping("/")   
+    public String getHealth() {
+        return "OK";
+    } 
 
-    @GetMapping("/")    
+    @GetMapping("/hello")    
     public String hello() {
         // Rutina para consumir CPU y demorar alrededor de 100ms
         long startTime = System.nanoTime();
